@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DanmuTest</string>
+    <string name="send">Send</string>
+    <string name="danmaku">Danmaku</string>
 </resources>
