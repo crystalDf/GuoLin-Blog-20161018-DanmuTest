@@ -4,7 +4,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.VideoView;
 
 import java.util.Random;
@@ -29,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
             return new Danmakus();
         }
     };
+
+    private LinearLayout mOperationLayout;
+    private Button mSend;
+    private EditText mEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,27 @@ public class MainActivity extends AppCompatActivity {
 
         mDanmakuContext = DanmakuContext.create();
         mDanmakuView.prepare(mBaseDanmakuParser, mDanmakuContext);
+
+        mOperationLayout = findViewById(R.id.operation_layout);
+        mSend = findViewById(R.id.send);
+        mEditText = findViewById(R.id.edit_text);
+
+        mDanmakuView.setOnClickListener(v -> mOperationLayout.setVisibility(
+                mOperationLayout.getVisibility() == View.GONE ? View.VISIBLE : View.GONE));
+        mSend.setOnClickListener(v -> {
+            String content = mEditText.getText().toString();
+
+            if (!TextUtils.isEmpty(content)) {
+                addDanmaku(content, true);
+                mEditText.setText("");
+            }
+        });
+
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (visibility == View.SYSTEM_UI_FLAG_VISIBLE) {
+                onWindowFocusChanged(true);
+            }
+        });
     }
 
     @Override
